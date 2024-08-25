@@ -8,8 +8,8 @@
 		<version>3.3.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.uol.compass.pb.ecommerce</groupId>
-	<artifactId>ecommerce-desafio3</artifactId>
+	<groupId>com.uol.compass.pb</groupId>
+	<artifactId>ecommerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ecommerce-desafio3</name>
 	<description>Ecommerce feito em Springboot 3 para o desafio 3 do PB-Mai2024 da Compass UOL de Calebe Almeida Melo</description>

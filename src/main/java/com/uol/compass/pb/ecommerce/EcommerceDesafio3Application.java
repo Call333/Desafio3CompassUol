@@ -1,4 +1,4 @@
-package com.uol.compass.pb.ecommerce.ecommerce_desafio3;
+package com.uol.compass.pb.ecommerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
