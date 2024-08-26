@@ -2,8 +2,20 @@ package com.uol.compass.pb.ecommerce.domain.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+
+//@Entity
 public class Produto {
+	//@Id
+	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String nome;
 	private String descricao;
 	private Integer quantidades;
@@ -11,23 +23,23 @@ public class Produto {
 	private Double avaliacoes;
 	private Integer qtd_avaliacoes;
 	
-	private List<String> tipos;
+	//@JsonIgnore
+	//private List<String> tipos;
 	
 	public Produto() {
 		
 	}
 	
-	public Produto(String nome, String descricao, Integer quantidades, Integer qtd_vendidas, Double avaliacoes,
-			Integer qtd_avaliacoes) {
+	public Produto(String nome, String descricao, Integer quantidades) {
 		super();
 		this.nome = nome;
 		this.descricao = descricao;
 		this.quantidades = quantidades;
-		this.qtd_vendidas = qtd_vendidas;
-		this.avaliacoes = avaliacoes;
-		this.qtd_avaliacoes = qtd_avaliacoes;
+		this.qtd_vendidas = 0;
+		this.avaliacoes = 0.0;
+		this.qtd_avaliacoes = 0;
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -83,8 +95,10 @@ public class Produto {
 	public void setQtd_avaliacoes(Integer qtd_avaliacoes) {
 		this.qtd_avaliacoes = qtd_avaliacoes;
 	}
-
+	
+	/*
 	public List<String> getTipos() {
 		return tipos;
-	}
+	} 
+	*/
 }
