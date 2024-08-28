@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -17,13 +18,13 @@ import jakarta.persistence.Transient;
 
 @Entity
 public class Usuario implements Serializable{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	private DateTimeFormatter formmatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	private DateTimeFormatter formatterBR = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+	@Transient
+	private DateTimeFormatter formatterISO = DateTimeFormatter.ISO_DATE;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,7 +35,9 @@ public class Usuario implements Serializable{
 	private String cpf;
 	private String endereco;
 	
+	
 	@Temporal(TemporalType.DATE)
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate data_nascimento;
 	
 	/*
@@ -51,7 +54,7 @@ public class Usuario implements Serializable{
 		this.sobrenome = sobrenome;
 		this.cpf = cpf;
 		this.endereco = endereco;
-		this.data_nascimento = LocalDate.parse(data_nascimento, formmatter);
+		this.data_nascimento = LocalDate.parse(data_nascimento, formatterBR);
 	}
 	
 	public Long getId() {
