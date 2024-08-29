@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -16,15 +18,18 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 	@Bean
-	public SecurityFilterChain securityFilter(HttpSecurity http) throws Exception{
+	public SecurityFilterChain securityFilter(
+			HttpSecurity http,
+			SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider) throws Exception{
 		return http.
 				authorizeHttpRequests(customizer -> {
 					customizer.anyRequest().authenticated();
 					
-				}).
-				httpBasic(Customizer.withDefaults()).
-				formLogin(Customizer.withDefaults()).
-				build();
+				})
+				.httpBasic(Customizer.withDefaults())
+				.formLogin(Customizer.withDefaults())
+				.authenticationProvider(senhaMasterAuthenticationProvider)
+				.build();
 	}
 	
 	
@@ -32,16 +37,21 @@ public class SecurityConfig {
 	public UserDetailsService userDetailsService() {
 		UserDetails commonUser = User.builder()
 				.username("user")
-				.password("1234")
+				.password(passwordEncoder().encode("1234"))
 				.roles("USER")
 				.build();
 		
 		UserDetails adminUser = User.builder()
 				.username("admin")
-				.password("@123")
+				.password(passwordEncoder().encode("admin"))
 				.roles("ADMIN")
 				.build();
 		
 		return new InMemoryUserDetailsManager(commonUser, adminUser);
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }
