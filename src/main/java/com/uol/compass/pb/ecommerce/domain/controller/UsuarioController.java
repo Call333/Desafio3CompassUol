@@ -30,26 +30,31 @@ public class UsuarioController {
 		this.usuarioService = usuarioService;
 	}
 	
+	
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario){
 		Usuario usuarioCriado = usuarioService.createUsuario(usuario);
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
 	}
 	
 	@GetMapping
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	public ResponseEntity<List<Usuario>> encontrarUsuarios(){
 		List<Usuario> usuariosEncontrados = usuarioService.searchAll();
 		return ResponseEntity.status(HttpStatus.FOUND).body(usuariosEncontrados);
 	}
 	
 	@GetMapping(path = "/{id}")
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	public ResponseEntity<Optional<Usuario>> encontrarUsuarioPeloId(@PathVariable Long id){
 		Optional<Usuario> usuarioEncontrado = usuarioService.searchById(id);
 		return ResponseEntity.status(HttpStatus.FOUND).body(usuarioEncontrado);
 	}
 	
 	
-	@PutMapping(value = "/{id}")
+	@PutMapping(path = "/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
 		Usuario atualizado = usuarioService.updateUsuario(id, usuario);
 		return ResponseEntity.status(HttpStatus.OK).body(atualizado);
@@ -57,6 +62,7 @@ public class UsuarioController {
 	
 	
 	@DeleteMapping(value = "/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> deletarUsuario(@PathVariable Long id){
 		usuarioService.deleteUsuarioById(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Usuario Deletado");

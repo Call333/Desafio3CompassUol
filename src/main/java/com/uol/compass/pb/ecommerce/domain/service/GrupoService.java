@@ -1,7 +1,6 @@
 package com.uol.compass.pb.ecommerce.domain.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -17,15 +16,15 @@ public class GrupoService {
 		this.grupoRepository = grupoRepository;
 	}
 	
-	public Grupo createGrupo(Grupo grupo) {
+	public Grupo saveGrupo(Grupo grupo) {
 		return grupoRepository.save(grupo);
 	}
 	
-	public Optional<Grupo> seachGrupoById(Long id) {
-		return grupoRepository.findById(id);
+	public Grupo searchGrupoById(Long id) {
+		return grupoRepository.findById(id).get();
 	}
 	
-	public List<Grupo> seachAllGrupo() {
+	public List<Grupo> searchAllGrupo() {
 		return grupoRepository.findAll();
 	}
 	
@@ -34,7 +33,7 @@ public class GrupoService {
 	}
 	
 	public Grupo updateGrupo(Long id, Grupo grupo) {
-		Grupo grupoEncontrado = seachGrupoById(id).get();
+		Grupo grupoEncontrado = searchGrupoById(id);
 		grupoEncontrado.setNome(grupo.getNome());
 		return grupoRepository.save(grupoEncontrado);
 	}
