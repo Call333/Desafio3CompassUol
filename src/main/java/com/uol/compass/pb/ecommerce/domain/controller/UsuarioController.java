@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import com.uol.compass.pb.ecommerce.domain.service.UsuarioService;
 
 @RestController
 @RequestMapping("/usuario")
+@PreAuthorize("hasRole('ADMIN')")
 public class UsuarioController {
 	
 	private UsuarioService usuarioService;
@@ -46,11 +48,13 @@ public class UsuarioController {
 		return ResponseEntity.status(HttpStatus.FOUND).body(usuarioEncontrado);
 	}
 	
+	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuario){
 		Usuario atualizado = usuarioService.updateUsuario(id, usuario);
 		return ResponseEntity.status(HttpStatus.OK).body(atualizado);
 	}
+	
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<String> deletarUsuario(@PathVariable Long id){
