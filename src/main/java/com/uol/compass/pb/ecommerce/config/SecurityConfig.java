@@ -29,9 +29,9 @@ public class SecurityConfig {
 			CustomFilter customFilter) throws Exception{
 		return http
 				.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(customizer -> {
-					customizer.anyRequest().authenticated();
-				})
+				.authorizeHttpRequests(customizer -> 
+					customizer.anyRequest().authenticated()
+				)
 				.httpBasic(Customizer.withDefaults())
 				.formLogin(Customizer.withDefaults())
 				.authenticationProvider(senhaMasterAuthenticationProvider)

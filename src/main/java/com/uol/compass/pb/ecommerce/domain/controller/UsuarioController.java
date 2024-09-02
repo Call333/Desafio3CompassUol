@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,18 +21,16 @@ import com.uol.compass.pb.ecommerce.domain.service.UsuarioService;
 
 @RestController
 @RequestMapping("/usuario")
-@PreAuthorize("hasRole('ADMIN')")
 public class UsuarioController {
 	
-	private UsuarioService usuarioService;
+	private final UsuarioService usuarioService;
 		
 	public UsuarioController(UsuarioService usuarioService) {
-		super();
 		this.usuarioService = usuarioService;
 	}
 	
-	
 	@PostMapping
+	@Transactional
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario){
 		Usuario usuarioCriado = usuarioService.createUsuario(usuario);
@@ -39,7 +38,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping
-	@PreAuthorize("hasAnyRole('ADMIN','USER')")
+	@PreAuthorize("hasAnyRole('USER', 'ADMIN')")
 	public ResponseEntity<List<Usuario>> encontrarUsuarios(){
 		List<Usuario> usuariosEncontrados = usuarioService.searchAll();
 		return ResponseEntity.status(HttpStatus.FOUND).body(usuariosEncontrados);
@@ -61,7 +60,7 @@ public class UsuarioController {
 	}
 	
 	
-	@DeleteMapping(value = "/{id}")
+	@DeleteMapping(path = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<String> deletarUsuario(@PathVariable Long id){
 		usuarioService.deleteUsuarioById(id);
