@@ -38,7 +38,6 @@ public class Usuario implements Serializable{
 	private String cpf;
 	private String endereco;
 	
-	
 	@Temporal(TemporalType.DATE)
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate data_nascimento;
@@ -144,6 +143,12 @@ public class Usuario implements Serializable{
 			return false;
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", login=" + login + ", senha=" + senha + ", nome=" + nome + ", sobrenome="
+				+ sobrenome + ", cpf=" + cpf + ", endereco=" + endereco + ", data_nascimento=" + data_nascimento + "]";
 	}
 	
 }

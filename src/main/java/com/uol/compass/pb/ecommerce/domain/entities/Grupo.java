@@ -47,5 +47,10 @@ public class Grupo {
 		Grupo other = (Grupo) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	@Override
+	public String toString() {
+		return "Grupo [id=" + id + ", nome=" + nome + "]";
+	}
 	
 }
