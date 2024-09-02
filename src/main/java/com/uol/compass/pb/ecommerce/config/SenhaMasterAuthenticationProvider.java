@@ -15,13 +15,13 @@ public class SenhaMasterAuthenticationProvider implements AuthenticationProvider
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		
-		var login = authentication.getName();
-		var senha = (String) authentication.getCredentials();
+		var userName = authentication.getName();
+		var userCredentials = authentication.getCredentials();
 		
 		String loginMaster = "master";
-		String senhaMaster = "@123";
+		String passMaster = "@123";
 		
-		if(loginMaster.equals(login) && senhaMaster.equals(senha)) {
+		if(userName.equals(loginMaster) && userCredentials.equals(passMaster)) {
 			return new UsernamePasswordAuthenticationToken
 					("Usuario Master", null, List.of(new SimpleGrantedAuthority("ADMIN")));
 		}

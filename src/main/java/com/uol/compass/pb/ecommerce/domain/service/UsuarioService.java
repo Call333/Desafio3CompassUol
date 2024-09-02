@@ -1,26 +1,69 @@
 package com.uol.compass.pb.ecommerce.domain.service;
 
-
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.uol.compass.pb.ecommerce.domain.entities.Grupo;
+import com.uol.compass.pb.ecommerce.domain.entities.GrupoUsuario;
 import com.uol.compass.pb.ecommerce.domain.entities.Usuario;
+import com.uol.compass.pb.ecommerce.domain.repository.GrupoRepository;
+import com.uol.compass.pb.ecommerce.domain.repository.GrupoUsuarioRepository;
 import com.uol.compass.pb.ecommerce.domain.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
-	private UsuarioRepository usuarioRepository;
+	private final UsuarioRepository usuarioRepository;
+	private final GrupoRepository grupoRepository;
+	private final GrupoUsuarioRepository grupoUsuarioRepository;
+	private final PasswordEncoder passwordEncoder;
 	
-	public UsuarioService(UsuarioRepository usuarioRepository) {
+	public UsuarioService(
+			UsuarioRepository usuarioRepository, 
+			GrupoRepository grupoRepository,
+			GrupoUsuarioRepository grupoUsuarioRepository, 
+			PasswordEncoder passwordEncoder) {
 		this.usuarioRepository = usuarioRepository;
+		this.grupoRepository = grupoRepository;
+		this.grupoUsuarioRepository = grupoUsuarioRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 	
-	public Usuario createUsuario(Usuario usuario) {
-		return usuarioRepository.save(usuario);
+	@Transactional
+	public Usuario createUsuario(Usuario usuario, List<String> grupos) {
+		String senhaCriptografa = passwordEncoder.encode(usuario.getSenha());
+		usuario.setSenha(senhaCriptografa);
+		usuarioRepository.save(usuario);
+		
+		/*
+		 * Código que lê a lista de grupos que vem do corpo da requisição
+		 * e verifica se esses usuarios possuem o grupo que exista na tabela
+		 * "grupo" no banco de dados. Assim que constata que um ou mais grupos
+		 * existem na tabela, ele cria um objeto do tipo GrupoUsuario(junção do
+		 * Usuario e o Grupo) e salva esse objeto numa tabela de usuarios com grupos de
+		 * usuarios com permissões.
+		 * */
+		
+		List<GrupoUsuario> listaGrupoUsuario = grupos.stream()
+				.map(nomeGrupo -> {
+					Optional<Grupo> possivelGrupo = grupoRepository.findByNome(nomeGrupo);
+					
+					if(possivelGrupo.isPresent()) {
+						Grupo grupo = possivelGrupo.get();
+						return new GrupoUsuario(usuario, grupo);
+					}
+					return null;
+				})
+				.filter(grupo -> grupo != null)
+				.collect(Collectors.toList());
+		
+		grupoUsuarioRepository.saveAll(listaGrupoUsuario);
+		
+		return usuario;
 	}
 	
 	public List<Usuario> searchAll(){
@@ -31,19 +74,50 @@ public class UsuarioService {
 		return usuarioRepository.findById(id);
 	}
 	
-	public Usuario updateUsuario(Long id, Usuario usuario){
+	public Usuario updateUsuario(Long id, Usuario usuario, List<String> grupos ){
 		Optional<Usuario> usuarioEncontrado = searchById(id);
+		
 		Usuario modelo = usuarioEncontrado.get();
+		modelo.setLogin(usuario.getLogin());
+		modelo.setSenha(usuario.getSenha());
 		modelo.setNome(usuario.getNome());
 		modelo.setSobrenome(usuario.getSobrenome());
 		modelo.setCPF(usuario.getCPF());
 		modelo.setEndereco(usuario.getEndereco());
 		modelo.setData_nascimento(usuario.getData_nascimento());
-
-		return usuarioRepository.save(modelo);
+		
+		List<GrupoUsuario> listaGrupoUsuario = grupos.stream()
+				.map(nomeGrupo -> {
+					Optional<Grupo> possivelGrupo = grupoRepository.findByNome(nomeGrupo);
+					
+					if(possivelGrupo.isPresent()) {
+						Grupo grupo = possivelGrupo.get();
+						return new GrupoUsuario(modelo, grupo);
+					}
+					return null;
+				})
+				.filter(grupo -> grupo != null)
+				.collect(Collectors.toList());
+		
+		grupoUsuarioRepository.saveAll(listaGrupoUsuario);
+		
+		return usuario;
 	} 
 	
 	public void deleteUsuarioById(Long id){
 		usuarioRepository.deleteById(id);
+	}
+	
+	public Usuario obterUsuarioComPermissoes(String login) {
+		Optional<Usuario> usuarioEncontrado = usuarioRepository.findByLogin(login);
+		if(usuarioEncontrado.isEmpty()) {
+			return null;
+		}
+		
+		Usuario usuario = usuarioEncontrado.get();
+		List<String> permissoes = grupoUsuarioRepository.findPermissoesByUsuario(usuario);
+		usuario.setPermissoes(permissoes);
+		
+		return usuario;
 	}
 }

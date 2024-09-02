@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +41,8 @@ public class Usuario implements Serializable{
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate data_nascimento;
 	
+	@Transient
+	private List<String> permissoes; 
 	/*
 	@JsonIgnore
 	private List<Produto> carrinho_de_compras;
@@ -49,7 +50,7 @@ public class Usuario implements Serializable{
 	public Usuario() {
 		
 	}
-	
+
 	public Usuario(String nome, String sobrenome, String cpf, String endereco, String data_nascimento) {
 		super();
 		this.nome = nome;
@@ -121,6 +122,14 @@ public class Usuario implements Serializable{
 
 	public void setData_nascimento(LocalDate data_nascimento) {
 		this.data_nascimento = data_nascimento;
+	}
+	
+	public List<String> getPermissoes() {
+		return permissoes;
+	}
+
+	public void setPermissoes(List<String> permissoes) {
+		this.permissoes = permissoes;
 	}
 	/*
 	public List<Produto> getCarrinho_de_compras() {

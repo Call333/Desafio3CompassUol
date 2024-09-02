@@ -23,6 +23,12 @@ public class GrupoUsuario {
 	@JoinColumn(name = "id_grupo")
 	private Grupo grupo;
 
+	public GrupoUsuario(Usuario usuario, Grupo grupo) {
+		super();
+		this.usuario = usuario;
+		this.grupo = grupo;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

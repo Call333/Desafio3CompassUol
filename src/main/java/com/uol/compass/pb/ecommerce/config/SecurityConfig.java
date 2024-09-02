@@ -24,19 +24,23 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilter(
-			HttpSecurity http,
+			HttpSecurity http, 
 			SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider,
-			CustomFilter customFilter) throws Exception{
+			CustomFilter customFilter,
+			CustomAuthenticationProvider customAuthenticationProvider) throws Exception {
 		return http
 				.csrf(AbstractHttpConfigurer::disable)
-				.authorizeHttpRequests(customizer -> 
-					customizer.anyRequest().authenticated()
-				)
+				.authorizeHttpRequests(
+						customizer -> {
+							customizer.requestMatchers("/usuario").permitAll();
+							customizer.anyRequest().authenticated();
+							})
 				.httpBasic(Customizer.withDefaults())
 				.formLogin(Customizer.withDefaults())
-				.authenticationProvider(senhaMasterAuthenticationProvider)
+				.authenticationProvider(customAuthenticationProvider)
 				.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
+		
 	}
 	
 	
