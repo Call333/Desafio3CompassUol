@@ -12,7 +12,7 @@ public class Grupo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String nome;
 
 	public Long getId() {
@@ -48,9 +48,4 @@ public class Grupo {
 		return Objects.equals(id, other.id);
 	}
 
-	@Override
-	public String toString() {
-		return "Grupo [id=" + id + ", nome=" + nome + "]";
-	}
-	
 }

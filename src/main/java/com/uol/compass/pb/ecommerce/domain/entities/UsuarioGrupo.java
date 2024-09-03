@@ -10,10 +10,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class GrupoUsuario {
+public class UsuarioGrupo {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
@@ -23,34 +23,17 @@ public class GrupoUsuario {
 	@JoinColumn(name = "id_grupo")
 	private Grupo grupo;
 
-	public GrupoUsuario(Usuario usuario, Grupo grupo) {
+	public UsuarioGrupo(Usuario usuario, Grupo grupo) {
 		super();
 		this.usuario = usuario;
 		this.grupo = grupo;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GrupoUsuario other = (GrupoUsuario) obj;
-		return Objects.equals(id, other.id);
-	}
-
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -68,6 +51,23 @@ public class GrupoUsuario {
 
 	public void setGrupo(Grupo grupo) {
 		this.grupo = grupo;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UsuarioGrupo other = (UsuarioGrupo) obj;
+		return Objects.equals(id, other.id);
 	}
 
 }

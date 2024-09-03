@@ -1,24 +1,31 @@
-package com.uol.compass.pb.ecommerce.security;
+package com.uol.compass.pb.ecommerce.domain.security;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.Data;
+
+@Data
 public class IdentificacaoUsuario {
 	private Long id;
 	private String nome;
 	private String login;
 	private List<String> permissoes;
-
+	
 	public IdentificacaoUsuario() {
 		
 	}
 	
 	public IdentificacaoUsuario(Long id, String nome, String login, List<String> permissoes) {
-		super();
+	
 		this.id = id;
 		this.nome = nome;
 		this.login = login;
+		// Essa validacao estava no metodo getPermissoes()
+		if (permissoes == null) {
+			permissoes = new ArrayList<>();
+		}
 		this.permissoes = permissoes;
 	}
 
@@ -46,20 +53,17 @@ public class IdentificacaoUsuario {
 		this.login = login;
 	}
 
-	public List<String> getPermissoes() {
-		if(permissoes == null) {
-			permissoes = new ArrayList<>();
-		}
-		return permissoes;
-	}
-
 	public void setPermissoes(List<String> permissoes) {
 		this.permissoes = permissoes;
+	}
+	
+	public List<String> getPermissoes() {
+		return permissoes;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, login, nome, permissoes);
 	}
 
 	@Override
@@ -71,7 +75,8 @@ public class IdentificacaoUsuario {
 		if (getClass() != obj.getClass())
 			return false;
 		IdentificacaoUsuario other = (IdentificacaoUsuario) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(id, other.id) && Objects.equals(login, other.login) && Objects.equals(nome, other.nome)
+				&& Objects.equals(permissoes, other.permissoes);
 	}
-
+	
 }

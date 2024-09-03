@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uol.compass.pb.ecommerce.domain.entities.Usuario;
 import com.uol.compass.pb.ecommerce.domain.service.UsuarioService;
-import com.uol.compass.pb.ecommerce.dto.CadastroUsuarioDTO;
+import com.uol.compass.pb.ecommerce.dto.UsuarioDTO;
 
 @RestController
 @RequestMapping("/usuario")
@@ -33,9 +33,12 @@ public class UsuarioController {
 	@PostMapping
 	@Transactional
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Usuario> criarUsuario(@RequestBody CadastroUsuarioDTO body ){
+	public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioDTO body ){
 		Usuario usuarioCriado = usuarioService.createUsuario(body.getUsuario(), body.getPermissoes());
-		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
+		UsuarioDTO modeloDto = new UsuarioDTO();
+		modeloDto.setUsuario(usuarioCriado);
+		modeloDto.setPermissoes(body.getPermissoes());
+		return ResponseEntity.status(HttpStatus.CREATED).body(modeloDto);
 	}
 	
 	@GetMapping
@@ -55,7 +58,7 @@ public class UsuarioController {
 	
 	@PutMapping(path = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody CadastroUsuarioDTO body){
+	public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO body){
 		Usuario atualizado = usuarioService.updateUsuario(id, body.getUsuario(), body.getPermissoes());
 		return ResponseEntity.status(HttpStatus.OK).body(atualizado);
 	}

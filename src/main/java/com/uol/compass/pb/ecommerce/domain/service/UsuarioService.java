@@ -9,23 +9,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uol.compass.pb.ecommerce.domain.entities.Grupo;
-import com.uol.compass.pb.ecommerce.domain.entities.GrupoUsuario;
 import com.uol.compass.pb.ecommerce.domain.entities.Usuario;
+import com.uol.compass.pb.ecommerce.domain.entities.UsuarioGrupo;
 import com.uol.compass.pb.ecommerce.domain.repository.GrupoRepository;
-import com.uol.compass.pb.ecommerce.domain.repository.GrupoUsuarioRepository;
+import com.uol.compass.pb.ecommerce.domain.repository.UsuarioGrupoRepository;
 import com.uol.compass.pb.ecommerce.domain.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
 	private final UsuarioRepository usuarioRepository;
 	private final GrupoRepository grupoRepository;
-	private final GrupoUsuarioRepository grupoUsuarioRepository;
+	private final UsuarioGrupoRepository grupoUsuarioRepository;
 	private final PasswordEncoder passwordEncoder;
 	
 	public UsuarioService(
 			UsuarioRepository usuarioRepository, 
 			GrupoRepository grupoRepository,
-			GrupoUsuarioRepository grupoUsuarioRepository, 
+			UsuarioGrupoRepository grupoUsuarioRepository, 
 			PasswordEncoder passwordEncoder) {
 		this.usuarioRepository = usuarioRepository;
 		this.grupoRepository = grupoRepository;
@@ -48,13 +48,13 @@ public class UsuarioService {
 		 * usuarios com permissões.
 		 * */
 		
-		List<GrupoUsuario> listaGrupoUsuario = grupos.stream()
+		List<UsuarioGrupo> listaGrupoUsuario = grupos.stream()
 				.map(nomeGrupo -> {
 					Optional<Grupo> possivelGrupo = grupoRepository.findByNome(nomeGrupo);
 					
 					if(possivelGrupo.isPresent()) {
 						Grupo grupo = possivelGrupo.get();
-						return new GrupoUsuario(usuario, grupo);
+						return new UsuarioGrupo(usuario, grupo);
 					}
 					return null;
 				})
@@ -81,18 +81,14 @@ public class UsuarioService {
 		modelo.setLogin(usuario.getLogin());
 		modelo.setSenha(usuario.getSenha());
 		modelo.setNome(usuario.getNome());
-		modelo.setSobrenome(usuario.getSobrenome());
-		modelo.setCPF(usuario.getCPF());
-		modelo.setEndereco(usuario.getEndereco());
-		modelo.setData_nascimento(usuario.getData_nascimento());
 		
-		List<GrupoUsuario> listaGrupoUsuario = grupos.stream()
+		List<UsuarioGrupo> listaGrupoUsuario = grupos.stream()
 				.map(nomeGrupo -> {
 					Optional<Grupo> possivelGrupo = grupoRepository.findByNome(nomeGrupo);
 					
 					if(possivelGrupo.isPresent()) {
 						Grupo grupo = possivelGrupo.get();
-						return new GrupoUsuario(modelo, grupo);
+						return new UsuarioGrupo(modelo, grupo);
 					}
 					return null;
 				})

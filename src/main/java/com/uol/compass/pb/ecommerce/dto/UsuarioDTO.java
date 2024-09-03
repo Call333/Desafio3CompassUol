@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import com.uol.compass.pb.ecommerce.domain.entities.Usuario;
 
-public class CadastroUsuarioDTO {
+public class UsuarioDTO {
 	private Usuario usuario;
 	private List<String> permissoes;
 
@@ -38,8 +38,7 @@ public class CadastroUsuarioDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		CadastroUsuarioDTO other = (CadastroUsuarioDTO) obj;
+		UsuarioDTO other = (UsuarioDTO) obj;
 		return Objects.equals(permissoes, other.permissoes) && Objects.equals(usuario, other.usuario);
 	}
-
 }
