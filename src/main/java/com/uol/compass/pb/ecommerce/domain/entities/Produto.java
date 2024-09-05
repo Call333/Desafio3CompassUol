@@ -1,5 +1,7 @@
 package com.uol.compass.pb.ecommerce.domain.entities;
 
+import java.util.Objects;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,8 +10,8 @@ import jakarta.persistence.Id;
 @Entity
 public class Produto {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 	
 	private String nome;
 	private String descricao;
@@ -17,26 +19,27 @@ public class Produto {
 	private Integer quantidade;
 	
 	private String vendedor;
-	private String desconto;
+	private Double desconto;
 	
 	public Produto() {
 		 
 	}
 	
-	public Produto(String nome, String descricao, Double preco, Integer quantidade, String vendedor) {
+	public Produto(String nome, String descricao, Double preco, Integer quantidade, String vendedor, Double desconto ) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.preco = preco;
 		this.quantidade = quantidade;
 		this.vendedor = vendedor;
+		this.desconto = desconto;
 	}
 	
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -91,13 +94,32 @@ public class Produto {
 	}
 
 
-	public String getDesconto() {
+	public Double getDesconto() {
 		return desconto;
 	}
 
 
-	public void setDesconto(String desconto) {
+	public void setDesconto(Double desconto) {
 		this.desconto = desconto;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Produto other = (Produto) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+	
 	
 }
