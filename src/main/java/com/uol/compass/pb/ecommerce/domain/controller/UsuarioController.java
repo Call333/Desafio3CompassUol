@@ -42,7 +42,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN','USER')")
 	public ResponseEntity<List<Usuario>> encontrarUsuarios(){
 		List<Usuario> usuariosEncontrados = usuarioService.searchAll();
 		return ResponseEntity.status(HttpStatus.FOUND).body(usuariosEncontrados);
@@ -55,14 +55,12 @@ public class UsuarioController {
 		return ResponseEntity.status(HttpStatus.FOUND).body(usuarioEncontrado);
 	}
 	
-	
 	@PutMapping(path = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @RequestBody UsuarioDTO body){
 		Usuario atualizado = usuarioService.updateUsuario(id, body.getUsuario(), body.getPermissoes());
 		return ResponseEntity.status(HttpStatus.OK).body(atualizado);
 	}
-	
 	
 	@DeleteMapping(path = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
