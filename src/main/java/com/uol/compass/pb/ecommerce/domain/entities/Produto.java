@@ -34,6 +34,10 @@ public class Produto {
 		this.desconto = desconto;
 	}
 	
+	public Double descontarPreco() {
+		return this.preco = preco - (preco * desconto);
+	}
+	
 	public String getId() {
 		return id;
 	}

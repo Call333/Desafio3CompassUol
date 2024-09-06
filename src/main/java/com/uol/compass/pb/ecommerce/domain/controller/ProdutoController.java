@@ -66,7 +66,7 @@ public class ProdutoController {
 	
 	@PutMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Produto> atualizarProduto(@PathVariable ProdutoDTO produtoDto){
+	public ResponseEntity<Produto> atualizarProduto(@RequestBody ProdutoDTO produtoDto){
 		Produto produto = produtoService.atualizarProduto(produtoDto.getId(), produtoDto.getProduto());
 		return ResponseEntity.status(HttpStatus.OK).body(produto); 
 	}
