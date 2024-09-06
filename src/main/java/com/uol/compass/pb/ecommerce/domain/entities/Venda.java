@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import com.uol.compass.pb.ecommerce.enums.StatusVenda;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,11 +20,10 @@ public class Venda {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	
-	@OneToOne(mappedBy = "usuario")
-	@JoinColumn(name = "id_usuario")
+	@OneToOne
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy = "produto")
+	@OneToMany
 	@JoinColumn(name = "id_produto")
 	private List<Produto> produtos;
 	
@@ -30,21 +31,21 @@ public class Venda {
 	
 	private Double desconto;
 	
-	private LocalDateTime horaDaVenda;
+	// private LocalDateTime horaDaVenda;
 	
 	private StatusVenda status;
 
-	public Venda(Usuario usuario, List<Produto> produtos, Double valorFinal, Double desconto, LocalDateTime horaDaVenda,
-			StatusVenda status) {
+	public Venda(Usuario usuario, List<Produto> produtos, Double valorFinal, Double desconto) {
 		super();
 		this.usuario = usuario;
 		this.produtos = produtos;
-		this.valorFinal = valorFinal;
+		// Valor final será o preco diminuido do desconto da compra
+		this.valorFinal = valorFinal - (valorFinal * desconto); 
 		this.desconto = desconto;
-		this.horaDaVenda = horaDaVenda;
-		this.status = status;
+		//this.horaDaVenda = horaDaVenda;
+		this.status = StatusVenda.AGUARDANDO_PAGAMENTO;
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -76,7 +77,8 @@ public class Venda {
 	public void setDesconto(Double desconto) {
 		this.desconto = desconto;
 	}
-
+	
+	/*
 	public LocalDateTime getHoraDaVenda() {
 		return horaDaVenda;
 	}
@@ -84,7 +86,7 @@ public class Venda {
 	public void setHoraDaVenda(LocalDateTime horaDaVenda) {
 		this.horaDaVenda = horaDaVenda;
 	}
-
+	*/
 	public StatusVenda getStatus() {
 		return status;
 	}
@@ -95,6 +97,10 @@ public class Venda {
 
 	public List<Produto> getProdutos() {
 		return produtos;
+	}
+	
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
 	}
 
 	@Override

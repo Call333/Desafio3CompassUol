@@ -1,7 +1,5 @@
 package com.uol.compass.pb.ecommerce.domain.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +19,6 @@ public  class ProdutoService {
 	
 	// Salvar produtos
 	public Produto salvarProduto(Produto produto) {
-		Double desconto = desconto(produto);
-		BigDecimal.valueOf(desconto).setScale(2, RoundingMode.HALF_UP);
-		produto.setPreco(desconto);
 		return produtoRepository.save(produto);
 	}
 	
@@ -52,7 +47,6 @@ public  class ProdutoService {
 		produtoAtualizado.setPreco(produto.getPreco());
 		produtoAtualizado.setQuantidade(produto.getQuantidade());
 		produtoAtualizado.setVendedor(produto.getVendedor());
-		produtoAtualizado.setDesconto(produto.getDesconto());
 		
 		produtoRepository.save(produtoAtualizado);
 		
@@ -64,9 +58,4 @@ public  class ProdutoService {
 		produtoRepository.deleteById(id);
 	}
 	
-	public Double desconto(Produto produto) {
-		produto.descontarPreco();
-		return produto.getPreco();
-		
-	}
 }

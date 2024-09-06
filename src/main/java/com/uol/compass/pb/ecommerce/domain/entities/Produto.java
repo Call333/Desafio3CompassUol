@@ -19,24 +19,19 @@ public class Produto {
 	private Integer quantidade;
 	
 	private String vendedor;
-	private Double desconto;
 	
 	public Produto() {
 		 
 	}
 	
-	public Produto(String nome, String descricao, Double preco, Integer quantidade, String vendedor, Double desconto ) {
+	public Produto(String nome, String descricao, Double preco, Integer quantidade, String vendedor ) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.preco = preco;
 		this.quantidade = quantidade;
 		this.vendedor = vendedor;
-		this.desconto = desconto;
 	}
-	
-	public Double descontarPreco() {
-		return this.preco = preco - (preco * desconto);
-	}
+
 	
 	public String getId() {
 		return id;
@@ -95,16 +90,6 @@ public class Produto {
 
 	public void setVendedor(String vendedor) {
 		this.vendedor = vendedor;
-	}
-
-
-	public Double getDesconto() {
-		return desconto;
-	}
-
-
-	public void setDesconto(Double desconto) {
-		this.desconto = desconto;
 	}
 
 	@Override

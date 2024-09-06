@@ -9,6 +9,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -20,6 +22,10 @@ public class Usuario {
 	private String nome;
 	private String login;
 	private String senha;
+	
+	@OneToMany
+	@JoinColumn(name = "id_venda")
+	private List<Venda> pedidos;
 	@JsonIgnore
 	@Transient
 	private List<String> permissoes;
