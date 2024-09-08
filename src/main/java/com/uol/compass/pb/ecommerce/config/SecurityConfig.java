@@ -32,6 +32,7 @@ public class SecurityConfig {
 				.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(
 						customizer -> {
+							//customizer.requestMatchers("/public/resetarsenha").permitAll();
 							customizer.anyRequest().authenticated();
 							})
 				/*

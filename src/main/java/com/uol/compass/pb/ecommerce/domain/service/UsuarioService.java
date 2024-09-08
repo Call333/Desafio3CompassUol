@@ -14,6 +14,7 @@ import com.uol.compass.pb.ecommerce.domain.entities.UsuarioGrupo;
 import com.uol.compass.pb.ecommerce.domain.repository.GrupoRepository;
 import com.uol.compass.pb.ecommerce.domain.repository.UsuarioGrupoRepository;
 import com.uol.compass.pb.ecommerce.domain.repository.UsuarioRepository;
+import com.uol.compass.pb.ecommerce.exception.UserNotFoundExeception;
 
 @Service
 public class UsuarioService {
@@ -111,7 +112,8 @@ public class UsuarioService {
 	public Usuario obterUsuarioComPermissoes(String login) {
 		Optional<Usuario> usuarioEncontrado = usuarioRepository.findByLogin(login);
 		if(usuarioEncontrado.isEmpty()) {
-			return null;
+			throw new UserNotFoundExeception
+			("Não é possivel obter as permissões de um usuário que está no banco de dados.");
 		}
 		
 		Usuario usuario = usuarioEncontrado.get();
@@ -121,4 +123,17 @@ public class UsuarioService {
 		return usuario;
 	}
 
+	public void resetarSenha(String login, String senha) {
+		Optional<Usuario> usuarioOptional = usuarioRepository.findByLogin(login);
+		if(usuarioOptional.isEmpty()) {
+			throw new UserNotFoundExeception
+			("Não é possivel resetar a senha de um usuario que não existe.");
+		}
+		
+		Usuario usuario = usuarioOptional.get();
+		String senhaCriptografa = passwordEncoder.encode(senha);
+		usuario.setSenha(senhaCriptografa);
+		
+		usuarioRepository.save(usuario);
+	}
 }
