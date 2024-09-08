@@ -7,6 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.uol.compass.pb.ecommerce.domain.entities.Usuario;
+
 public class CustomAuthentication implements Authentication{
 	/**
 	 * 
@@ -42,8 +44,12 @@ public class CustomAuthentication implements Authentication{
 	}
 
 	@Override
-	public Object getDetails() {
-		return null;
+	public Usuario getDetails() {
+		Usuario usuario = new Usuario();
+		usuario.setId(this.identificacaoUsuario.getId());
+		usuario.setLogin(this.identificacaoUsuario.getLogin());
+		usuario.setPermissoes(this.identificacaoUsuario.getPermissoes());
+		return usuario;
 	}
 
 	@Override

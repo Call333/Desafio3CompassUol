@@ -78,5 +78,12 @@ public class IdentificacaoUsuario {
 		return Objects.equals(id, other.id) && Objects.equals(login, other.login) && Objects.equals(nome, other.nome)
 				&& Objects.equals(permissoes, other.permissoes);
 	}
+
+	@Override
+	public String toString() {
+		return "IdentificacaoUsuario [id=" + id + ", nome=" + nome + ", login=" + login + ", permissoes=" + permissoes
+				+ "]";
+	}
+	
 	
 }

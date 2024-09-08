@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,7 +49,7 @@ public class ProdutoController {
 		return ResponseEntity.status(HttpStatus.FOUND).body(produtos); 
 	}
 	
-	@GetMapping(path = "/{nome}")
+	@GetMapping(path = "/nome/{nome}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public ResponseEntity<List<Produto>> acharProdutosPorNome(@PathVariable String nome){
 		List<Produto> produtos = produtoService.encontrarProdutosPeloNome(nome);
@@ -75,8 +76,8 @@ public class ProdutoController {
 	
 	@DeleteMapping(path = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> deletarProduto(@PathVariable String id){
+	public ResponseEntity<String> deletarProduto(@PathVariable String id, Authentication auth){
 		produtoService.deletarProduto(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Produto deletado"); 
+		return ResponseEntity.status(HttpStatus.OK).body(auth.getName()); 
 	}
 }

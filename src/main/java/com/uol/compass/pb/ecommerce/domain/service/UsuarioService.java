@@ -43,7 +43,7 @@ public class UsuarioService {
 		 * Código que lê a lista de grupos que vem do corpo da requisição
 		 * e verifica se esses usuarios possuem o grupo que exista na tabela
 		 * "grupo" no banco de dados. Assim que constata que um ou mais grupos
-		 * existem na tabela, ele cria um objeto do tipo GrupoUsuario(junção do
+		 * existem na tabela, ele cria um objeto do tipo UsuarioGrupo(junção do
 		 * Usuario e o Grupo) e salva esse objeto numa tabela de usuarios com grupos de
 		 * usuarios com permissões.
 		 * */
@@ -116,4 +116,5 @@ public class UsuarioService {
 		
 		return usuario;
 	}
+
 }

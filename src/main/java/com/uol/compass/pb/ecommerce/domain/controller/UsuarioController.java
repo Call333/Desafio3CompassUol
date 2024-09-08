@@ -42,7 +42,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping
-	@PreAuthorize("hasRole('ADMIN','USER')")
+	@PreAuthorize("hasAnyRole('ADMIN','USER')")
 	public ResponseEntity<List<Usuario>> encontrarUsuarios(){
 		List<Usuario> usuariosEncontrados = usuarioService.searchAll();
 		return ResponseEntity.status(HttpStatus.FOUND).body(usuariosEncontrados);
@@ -68,4 +68,5 @@ public class UsuarioController {
 		usuarioService.deleteUsuarioById(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Usuario Deletado");
 	}
+
 }

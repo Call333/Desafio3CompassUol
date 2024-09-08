@@ -1,16 +1,21 @@
 package com.uol.compass.pb.ecommerce.domain.entities;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.annotations.ManyToAny;
+
 import com.uol.compass.pb.ecommerce.enums.StatusVenda;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 
@@ -20,30 +25,41 @@ public class Venda {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
 	
-	@OneToOne
+	@ManyToOne
 	private Usuario usuario;
 	
-	@OneToMany
-	@JoinColumn(name = "id_produto")
+	@OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
 	private List<Produto> produtos;
-	
+
 	private Double valorFinal;
-	
+
+	private Integer quantidade;
+
 	private Double desconto;
-	
+
 	// private LocalDateTime horaDaVenda;
-	
+
 	private StatusVenda status;
 
-	public Venda(Usuario usuario, List<Produto> produtos, Double valorFinal, Double desconto) {
-		super();
+	public Venda() {
+
+	}
+
+	public Venda(Usuario usuario, List<Produto> produtos, Double desconto) {
 		this.usuario = usuario;
-		this.produtos = produtos;
+		//this.produtos = produtos;
 		// Valor final será o preco diminuido do desconto da compra
-		this.valorFinal = valorFinal - (valorFinal * desconto); 
+		this.valorFinal = calcularTotal(produtos) - (calcularTotal(produtos) * desconto);
 		this.desconto = desconto;
-		//this.horaDaVenda = horaDaVenda;
 		this.status = StatusVenda.AGUARDANDO_PAGAMENTO;
+	}
+	
+	public Double calcularTotal(List<Produto> produtos) {
+		Double total = 0.0;
+		for (Produto produto : produtos) {
+			total += produto.getPreco();
+		}
+		return total;
 	}
 	
 	public String getId() {
@@ -69,7 +85,15 @@ public class Venda {
 	public void setValorFinal(Double valorFinal) {
 		this.valorFinal = valorFinal;
 	}
-
+	
+	public Integer getQuantidade() {
+		return quantidade;
+	}
+	
+	public void setQuantidade(Integer quantidade) {
+		this.quantidade = quantidade;
+	}
+	
 	public Double getDesconto() {
 		return desconto;
 	}
@@ -77,16 +101,7 @@ public class Venda {
 	public void setDesconto(Double desconto) {
 		this.desconto = desconto;
 	}
-	
-	/*
-	public LocalDateTime getHoraDaVenda() {
-		return horaDaVenda;
-	}
 
-	public void setHoraDaVenda(LocalDateTime horaDaVenda) {
-		this.horaDaVenda = horaDaVenda;
-	}
-	*/
 	public StatusVenda getStatus() {
 		return status;
 	}
@@ -94,15 +109,15 @@ public class Venda {
 	public void setStatus(StatusVenda status) {
 		this.status = status;
 	}
-
-	public List<Produto> getProdutos() {
+	/*
+	public List<Produto> getProduto() {
 		return produtos;
 	}
-	
+
 	public void setProdutos(List<Produto> produtos) {
 		this.produtos = produtos;
 	}
-
+	*/
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -119,5 +134,5 @@ public class Venda {
 		Venda other = (Venda) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-}	
+
+}

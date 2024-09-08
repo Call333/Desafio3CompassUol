@@ -5,12 +5,17 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Transient;
 
 @Entity
@@ -22,9 +27,8 @@ public class Usuario {
 	private String nome;
 	private String login;
 	private String senha;
-	
-	@OneToMany
-	@JoinColumn(name = "id_venda")
+
+	@OneToMany(mappedBy = "usuario")
 	private List<Venda> pedidos;
 	@JsonIgnore
 	@Transient
@@ -73,6 +77,14 @@ public class Usuario {
 		this.senha = senha;
 	}
 	
+	public List<Venda> getPedidos() {
+		return pedidos;
+	}
+	
+	public void setPedidos(List<Venda> pedidos) {
+		this.pedidos = pedidos;
+	}
+	
 	public List<String> getPermissoes() {
 		return permissoes;
 	}
@@ -83,7 +95,7 @@ public class Usuario {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(id, login, nome);
 	}
 
 	@Override
@@ -95,7 +107,7 @@ public class Usuario {
 		if (getClass() != obj.getClass())
 			return false;
 		Usuario other = (Usuario) obj;
-		return Objects.equals(id, other.id);
+		return Objects.equals(id, other.id) && Objects.equals(login, other.login) && Objects.equals(nome, other.nome);
 	}
-
+	
 }
