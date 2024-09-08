@@ -28,8 +28,8 @@ public  class ProdutoService {
 		return produtoRepository.findAll();
 	}
 	
-	public List<Produto> encontrarProdutosPeloNome(String nome) {
-		List<Produto> produto = produtoRepository.findByNome(nome).get();
+	public List<Produto> encontrarProdutosPeloVendedor(String nome) {
+		List<Produto> produto = produtoRepository.findByVendedor(nome).get();
 		return produto;
 	}
 	

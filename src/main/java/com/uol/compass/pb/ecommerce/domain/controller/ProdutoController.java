@@ -49,13 +49,6 @@ public class ProdutoController {
 		return ResponseEntity.status(HttpStatus.FOUND).body(produtos); 
 	}
 	
-	@GetMapping(path = "/nome/{nome}")
-	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public ResponseEntity<List<Produto>> acharProdutosPorNome(@PathVariable String nome){
-		List<Produto> produtos = produtoService.encontrarProdutosPeloNome(nome);
-		return ResponseEntity.status(HttpStatus.FOUND).body(produtos); 
-	}
-	
 	@GetMapping(path = "/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public ResponseEntity<Produto> acharProdutoPorId(@PathVariable String id){
@@ -76,8 +69,8 @@ public class ProdutoController {
 	
 	@DeleteMapping(path = "/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> deletarProduto(@PathVariable String id, Authentication auth){
+	public ResponseEntity<String> deletarProduto(@PathVariable String id){
 		produtoService.deletarProduto(id);
-		return ResponseEntity.status(HttpStatus.OK).body(auth.getName()); 
+		return ResponseEntity.status(HttpStatus.OK).body("Produto com id: " + id + " deletado!"); 
 	}
 }

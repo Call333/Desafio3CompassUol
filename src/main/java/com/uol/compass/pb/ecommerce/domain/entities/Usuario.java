@@ -1,5 +1,6 @@
 package com.uol.compass.pb.ecommerce.domain.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,6 +44,7 @@ public class Usuario {
 		this.nome = nome;
 		this.login = login;
 		this.senha = senha;
+		this.pedidos = new ArrayList<>();
 	}
 
 	public Long getId() {

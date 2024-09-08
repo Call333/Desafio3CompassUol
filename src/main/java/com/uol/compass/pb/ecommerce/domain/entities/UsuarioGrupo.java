@@ -22,7 +22,11 @@ public class UsuarioGrupo {
 	@ManyToOne
 	@JoinColumn(name = "id_grupo")
 	private Grupo grupo;
-
+	
+	public UsuarioGrupo() {
+		
+	}
+	
 	public UsuarioGrupo(Usuario usuario, Grupo grupo) {
 		super();
 		this.usuario = usuario;

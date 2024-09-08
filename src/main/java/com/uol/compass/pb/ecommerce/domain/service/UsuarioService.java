@@ -19,17 +19,17 @@ import com.uol.compass.pb.ecommerce.domain.repository.UsuarioRepository;
 public class UsuarioService {
 	private final UsuarioRepository usuarioRepository;
 	private final GrupoRepository grupoRepository;
-	private final UsuarioGrupoRepository grupoUsuarioRepository;
+	private final UsuarioGrupoRepository usuarioGrupoRepository;
 	private final PasswordEncoder passwordEncoder;
 	
 	public UsuarioService(
 			UsuarioRepository usuarioRepository, 
 			GrupoRepository grupoRepository,
-			UsuarioGrupoRepository grupoUsuarioRepository, 
+			UsuarioGrupoRepository usuarioGrupoRepository, 
 			PasswordEncoder passwordEncoder) {
 		this.usuarioRepository = usuarioRepository;
 		this.grupoRepository = grupoRepository;
-		this.grupoUsuarioRepository = grupoUsuarioRepository;
+		this.usuarioGrupoRepository = usuarioGrupoRepository;
 		this.passwordEncoder = passwordEncoder;
 	}
 	
@@ -48,7 +48,7 @@ public class UsuarioService {
 		 * usuarios com permissões.
 		 * */
 		
-		List<UsuarioGrupo> listaGrupoUsuario = grupos.stream()
+		List<UsuarioGrupo> listaUsuarioGrupo = grupos.stream()
 				.map(nomeGrupo -> {
 					Optional<Grupo> possivelGrupo = grupoRepository.findByNome(nomeGrupo);
 					
@@ -61,7 +61,7 @@ public class UsuarioService {
 				.filter(grupo -> grupo != null)
 				.collect(Collectors.toList());
 		
-		grupoUsuarioRepository.saveAll(listaGrupoUsuario);
+		usuarioGrupoRepository.saveAll(listaUsuarioGrupo);
 		
 		return usuario;
 	}
@@ -77,16 +77,19 @@ public class UsuarioService {
 	public Usuario updateUsuario(Long id, Usuario usuario, List<String> grupos ){
 		Optional<Usuario> usuarioEncontrado = searchById(id);
 		
+		String senhaCriptografa = passwordEncoder.encode(usuario.getSenha());
+		
 		Usuario modelo = usuarioEncontrado.get();
 		modelo.setLogin(usuario.getLogin());
-		modelo.setSenha(usuario.getSenha());
+		modelo.setSenha(senhaCriptografa);
 		modelo.setNome(usuario.getNome());
 		
-		List<UsuarioGrupo> listaGrupoUsuario = grupos.stream()
+		List<UsuarioGrupo> listaUsuarioGrupo = grupos.stream()
 				.map(nomeGrupo -> {
 					Optional<Grupo> possivelGrupo = grupoRepository.findByNome(nomeGrupo);
 					
 					if(possivelGrupo.isPresent()) {
+						usuarioGrupoRepository.deletePermissoesByUsuario(id);
 						Grupo grupo = possivelGrupo.get();
 						return new UsuarioGrupo(modelo, grupo);
 					}
@@ -95,12 +98,13 @@ public class UsuarioService {
 				.filter(grupo -> grupo != null)
 				.collect(Collectors.toList());
 		
-		grupoUsuarioRepository.saveAll(listaGrupoUsuario);
+		usuarioGrupoRepository.saveAll(listaUsuarioGrupo);
 		
-		return usuario;
+		return modelo;
 	} 
 	
 	public void deleteUsuarioById(Long id){
+		usuarioGrupoRepository.deletePermissoesByUsuario(id);
 		usuarioRepository.deleteById(id);
 	}
 	
@@ -111,7 +115,7 @@ public class UsuarioService {
 		}
 		
 		Usuario usuario = usuarioEncontrado.get();
-		List<String> permissoes = grupoUsuarioRepository.findPermissoesByUsuario(usuario);
+		List<String> permissoes = usuarioGrupoRepository.findPermissoesByUsuario(usuario);
 		usuario.setPermissoes(permissoes);
 		
 		return usuario;
