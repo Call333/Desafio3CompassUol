@@ -3,11 +3,14 @@ package com.uol.compass.pb.ecommerce.domain.entities;
 import java.util.List;
 import java.util.Objects;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
 
 public class VendaUsuario {
 	@Id
@@ -18,7 +21,7 @@ public class VendaUsuario {
 	@JoinColumn(name = "id_usuario")
 	private Usuario usuario;
 	
-	@ManyToOne
+	@OneToMany
 	@JoinColumn(name = "id_pedido")
 	private List<Venda> vendas;
 

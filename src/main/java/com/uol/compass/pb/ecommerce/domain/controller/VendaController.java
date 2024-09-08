@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uol.compass.pb.ecommerce.domain.entities.Venda;
 import com.uol.compass.pb.ecommerce.domain.security.CustomAuthentication;
 import com.uol.compass.pb.ecommerce.domain.service.VendaService;
+import com.uol.compass.pb.ecommerce.dto.VendaDTO;
 
 @RestController
 // @RequestMapping("/vendas")
@@ -29,9 +30,9 @@ public class VendaController {
 	@PostMapping("/auth/vendas")
 	@Transactional
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public ResponseEntity<Venda> criarVenda(CustomAuthentication authentication, @RequestBody Venda venda){
+	public ResponseEntity<Venda> criarVenda(CustomAuthentication authentication, @RequestBody VendaDTO vendaDto){
 		Long id = authentication.getDetails().getId();
-		Venda vendaCriada = vendaService.salvarVenda(id, venda);
+		Venda vendaCriada = vendaService.salvarVenda(id, vendaDto.getIdentificadorDosProdutos(), vendaDto.getQuantidade());
 		return ResponseEntity.status(HttpStatus.CREATED).body(vendaCriada);
 	}
 	

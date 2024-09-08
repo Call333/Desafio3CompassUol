@@ -106,4 +106,11 @@ public class Produto {
 		return Objects.equals(id, other.id);
 	}
 
+	@Override
+	public String toString() {
+		return "Produto [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", preco=" + preco
+				+ ", quantidade=" + quantidade + ", ativado=" + ativado + ", vendedor=" + vendedor + "]";
+	}
+	
+	
 }

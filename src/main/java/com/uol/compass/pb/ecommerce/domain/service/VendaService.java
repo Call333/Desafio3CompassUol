@@ -6,8 +6,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.uol.compass.pb.ecommerce.domain.entities.Produto;
 import com.uol.compass.pb.ecommerce.domain.entities.Usuario;
 import com.uol.compass.pb.ecommerce.domain.entities.Venda;
+import com.uol.compass.pb.ecommerce.domain.repository.ProdutoRepository;
 import com.uol.compass.pb.ecommerce.domain.repository.UsuarioRepository;
 import com.uol.compass.pb.ecommerce.domain.repository.VendaRepository;
 
@@ -15,20 +17,30 @@ import com.uol.compass.pb.ecommerce.domain.repository.VendaRepository;
 public class VendaService {
 	private final VendaRepository vendaRepository;
 	private final UsuarioRepository usuarioRepository;
+	private final ProdutoRepository produtoRepository;
 
 	public VendaService(VendaRepository vendaRepository,
-			UsuarioRepository usuarioRepository) {
+			UsuarioRepository usuarioRepository,
+			ProdutoRepository produtoRepository) {
 		this.vendaRepository = vendaRepository;
 		this.usuarioRepository = usuarioRepository;
+		this.produtoRepository = produtoRepository;
 	}
 	
-	public Venda salvarVenda(Long id, Venda venda) {
+	public Venda salvarVenda(Long id, List<String> ids_produtos, Integer quantidade ) {
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(id);
 		
 		Usuario usuario = usuarioOptional.get();
 		
+		List<Produto> produtos = ids_produtos.stream()
+				.map(id_produto -> {
+					Produto produto = produtoRepository.findById(id_produto).get();
+					return produto;
+				}).collect(Collectors.toList());
+		
+		Venda venda = new Venda(usuario, produtos, quantidade);
+		
 		usuario.getPedidos().add(venda);
-		usuarioRepository.save(usuario);
 		
 		venda.setUsuario(usuario);
 		

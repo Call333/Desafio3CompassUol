@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uol.compass.pb.ecommerce.enums.StatusVenda;
 
 import jakarta.persistence.Entity;
@@ -23,7 +24,7 @@ public class Venda {
 	@ManyToOne
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy = "id", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
 	private List<Produto> produtos;
 
 	private Double valorFinal;
@@ -43,7 +44,7 @@ public class Venda {
 		this.produtos = produtos;
 		this.valorFinal = calcularTotal(produtos);
 		this.quantidade = quantidade;
-		this.setHoraDaVenda(LocalDateTime.now());
+		this.horaDaVenda = LocalDateTime.now();
 		this.status = StatusVenda.AGUARDANDO_PAGAMENTO;
 	}
 	

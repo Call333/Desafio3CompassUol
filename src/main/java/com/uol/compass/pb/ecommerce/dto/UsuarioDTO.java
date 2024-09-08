@@ -24,7 +24,7 @@ public class UsuarioDTO {
 	public void setPermissoes(List<String> permissoes) {
 		this.permissoes = permissoes;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(permissoes, usuario);
