@@ -12,23 +12,24 @@ public class Produto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;
-
+	
 	private String nome;
 	private String descricao;
 	private Double preco;
 	private Integer quantidade;
-
+	private Boolean ativado;
 	private String vendedor;
 
 	public Produto() {
 
 	}
 
-	public Produto(String nome, String descricao, Double preco, Integer quantidade, String vendedor) {
+	public Produto(String nome, String descricao, Double preco, Integer quantidade, Boolean ativado, String vendedor) {
 		this.nome = nome;
 		this.descricao = descricao;
 		this.preco = preco;
 		this.quantidade = quantidade;
+		this.ativado = ativado;
 		this.vendedor = vendedor;
 	}
 
@@ -80,6 +81,14 @@ public class Produto {
 		this.vendedor = vendedor;
 	}
 
+	public Boolean getAtivado() {
+		return ativado;
+	}
+
+	public void setAtivado(Boolean ativado) {
+		this.ativado = ativado;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

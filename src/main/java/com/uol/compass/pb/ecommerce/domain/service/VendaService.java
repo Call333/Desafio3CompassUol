@@ -28,7 +28,7 @@ public class VendaService {
 		Usuario usuario = usuarioOptional.get();
 		
 		usuario.getPedidos().add(venda);
-		Usuario save = usuarioRepository.save(usuario);
+		usuarioRepository.save(usuario);
 		
 		venda.setUsuario(usuario);
 		

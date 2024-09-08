@@ -1,23 +1,18 @@
 package com.uol.compass.pb.ecommerce.domain.entities;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import org.hibernate.annotations.ManyToAny;
-
 import com.uol.compass.pb.ecommerce.enums.StatusVenda;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
 @Entity
 public class Venda {
@@ -35,9 +30,7 @@ public class Venda {
 
 	private Integer quantidade;
 
-	private Double desconto;
-
-	// private LocalDateTime horaDaVenda;
+	private LocalDateTime horaDaVenda;
 
 	private StatusVenda status;
 
@@ -45,12 +38,12 @@ public class Venda {
 
 	}
 
-	public Venda(Usuario usuario, List<Produto> produtos, Double desconto) {
+	public Venda(Usuario usuario, List<Produto> produtos, Integer quantidade) {
 		this.usuario = usuario;
-		//this.produtos = produtos;
-		// Valor final será o preco diminuido do desconto da compra
-		this.valorFinal = calcularTotal(produtos) - (calcularTotal(produtos) * desconto);
-		this.desconto = desconto;
+		this.produtos = produtos;
+		this.valorFinal = calcularTotal(produtos);
+		this.quantidade = quantidade;
+		this.setHoraDaVenda(LocalDateTime.now());
 		this.status = StatusVenda.AGUARDANDO_PAGAMENTO;
 	}
 	
@@ -77,7 +70,15 @@ public class Venda {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-
+	
+	public List<Produto> getProdutos() {
+		return produtos;
+	}
+	
+	public void setProdutos(List<Produto> produtos) {
+		this.produtos = produtos;
+	}
+	
 	public Double getValorFinal() {
 		return valorFinal;
 	}
@@ -94,14 +95,14 @@ public class Venda {
 		this.quantidade = quantidade;
 	}
 	
-	public Double getDesconto() {
-		return desconto;
+	public LocalDateTime getHoraDaVenda() {
+		return horaDaVenda;
 	}
 
-	public void setDesconto(Double desconto) {
-		this.desconto = desconto;
+	public void setHoraDaVenda(LocalDateTime horaDaVenda) {
+		this.horaDaVenda = horaDaVenda;
 	}
-
+	
 	public StatusVenda getStatus() {
 		return status;
 	}
@@ -109,15 +110,7 @@ public class Venda {
 	public void setStatus(StatusVenda status) {
 		this.status = status;
 	}
-	/*
-	public List<Produto> getProduto() {
-		return produtos;
-	}
-
-	public void setProdutos(List<Produto> produtos) {
-		this.produtos = produtos;
-	}
-	*/
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -134,5 +127,4 @@ public class Venda {
 		Venda other = (Venda) obj;
 		return Objects.equals(id, other.id);
 	}
-
 }

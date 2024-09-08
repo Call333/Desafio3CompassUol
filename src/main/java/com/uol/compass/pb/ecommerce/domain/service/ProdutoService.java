@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.uol.compass.pb.ecommerce.domain.entities.Produto;
-import com.uol.compass.pb.ecommerce.domain.entities.Venda;
 import com.uol.compass.pb.ecommerce.domain.repository.ProdutoRepository;
 
 @Service
