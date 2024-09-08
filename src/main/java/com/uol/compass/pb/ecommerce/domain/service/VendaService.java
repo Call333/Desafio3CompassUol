@@ -48,6 +48,7 @@ public class VendaService {
 	}
 	
 	public List<Venda> lerVendas() {
+		
 		return vendaRepository.findAll();
 	}
 	

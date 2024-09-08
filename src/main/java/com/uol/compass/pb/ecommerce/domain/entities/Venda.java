@@ -24,7 +24,7 @@ public class Venda {
 	@ManyToOne
 	private Usuario usuario;
 	
-	@OneToMany(mappedBy = "id", fetch = FetchType.EAGER)
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<Produto> produtos;
 
 	private Double valorFinal;

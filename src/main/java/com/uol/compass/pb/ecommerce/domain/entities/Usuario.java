@@ -38,7 +38,7 @@ public class Usuario {
 	private String senha;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.PERSIST)
+	@OneToMany(cascade = CascadeType.PERSIST)
 	private List<Venda> pedidos;
 	@JsonIgnore
 	@Transient
