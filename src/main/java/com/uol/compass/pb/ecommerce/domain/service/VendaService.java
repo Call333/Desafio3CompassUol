@@ -58,38 +58,18 @@ public class VendaService {
 		return venda;
 	}
 	
-	/*
-	public Venda atualizarVenda(String id, Venda venda) {
-		Optional<Venda> vendaEncontrada = vendaRepository.findById(id);
-		Venda vendaAtualizada = vendaEncontrada.get();
-		
-		vendaAtualizada.setUsuario(venda.getUsuario());
-		vendaAtualizada.setProdutos(venda.getProdutos());
-		vendaAtualizada.setValorFinal(venda.getValorFinal());
-		vendaAtualizada.setDesconto(venda.getDesconto());
-		vendaAtualizada.setStatus(venda.getStatus());
-		
-		return vendaRepository.save(vendaAtualizada);
-	}
-	*/
-	
 	public void deletarVenda(Long id_usuario, String id_venda) {
 		Optional<Usuario> usuarioOptional = usuarioRepository.findById(id_usuario);
 		
 		Usuario usuario = usuarioOptional.get();
 		
-		List<Venda> listaDeVendasDoUsuario = usuario.getPedidos();
-		
-		listaDeVendasDoUsuario.stream().map( id_venda_do_usuario -> {
-			if(id_venda_do_usuario.getId().equals(id_venda)) {
-				vendaRepository.deleteById(id_venda);
-			}
-			return id_venda_do_usuario;
-		}).collect(Collectors.toList());
-		
-		usuario.setPedidos(listaDeVendasDoUsuario);
-		
-		usuarioRepository.save(usuario);
+		usuario.getPedidos().stream()
+				.map( id_venda_do_usuario -> {
+					if(id_venda_do_usuario.getId().equals(id_venda)) {
+						vendaRepository.deleteById(id_venda);
+					}
+					return id_venda_do_usuario;
+				}).collect(Collectors.toList());
 	}
 	
 	public List<Venda> lerVendasPorUsuario(Long id){

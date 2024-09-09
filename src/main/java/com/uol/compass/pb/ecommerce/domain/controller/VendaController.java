@@ -58,10 +58,11 @@ public class VendaController {
 		return ResponseEntity.status(HttpStatus.OK).body(vendas);
 	}
 	
-	@DeleteMapping("/usuario/{id_usuario}/vendas/{id_venda}")
+	@DeleteMapping("/auth/vendas")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> DeletarVenda(@PathVariable Long id_usuario, @PathVariable String id_venda){
-		vendaService.deletarVenda(id_usuario, id_venda);
+	public ResponseEntity<String> DeletarVenda(CustomAuthentication authentication, @RequestBody String id_venda){
+		Long id = authentication.getDetails().getId();
+		vendaService.deletarVenda(id, id_venda);
 		return ResponseEntity.status(HttpStatus.OK).body("Venda deletada");
 	}
 }

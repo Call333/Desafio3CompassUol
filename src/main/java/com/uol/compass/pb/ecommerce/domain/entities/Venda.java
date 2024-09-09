@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uol.compass.pb.ecommerce.enums.StatusVenda;
 
 import jakarta.persistence.Entity;
@@ -42,7 +41,7 @@ public class Venda {
 	public Venda(Usuario usuario, List<Produto> produtos, Integer quantidade) {
 		this.usuario = usuario;
 		this.produtos = produtos;
-		this.valorFinal = calcularTotal(produtos);
+		this.valorFinal = calcularTotal(produtos) * quantidade;
 		this.quantidade = quantidade;
 		this.horaDaVenda = LocalDateTime.now();
 		this.status = StatusVenda.AGUARDANDO_PAGAMENTO;
