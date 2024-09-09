@@ -32,5 +32,13 @@ public interface UsuarioGrupoRepository extends JpaRepository<UsuarioGrupo, Stri
 			
 			""")
 	void deletePermissoesByUsuario(Long id);
-
+	
+	@Modifying
+	@Transactional
+	@Query("""
+			
+			DELETE FROM UsuarioGrupo ug WHERE ug.grupo.id = :id
+			
+			""")
+	void deletePermissoesById(Long id);
 }

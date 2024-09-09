@@ -13,9 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Usuario {
@@ -23,18 +20,8 @@ public class Usuario {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotNull
-	@Min(value = 3)
 	private String nome;
-	
-	@NotNull
-	@NotEmpty
-	@Min(value = 3)
 	private String login;
-	
-	@NotEmpty
-	@NotNull
-	@Min(value = 3)
 	private String senha;
 	
 	@JsonIgnore

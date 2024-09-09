@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 
 @Entity
 public class Venda {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id;

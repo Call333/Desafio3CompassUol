@@ -113,7 +113,7 @@ public class UsuarioService {
 		Optional<Usuario> usuarioEncontrado = usuarioRepository.findByLogin(login);
 		if(usuarioEncontrado.isEmpty()) {
 			throw new UserNotFoundExeception
-			("Não é possivel obter as permissões de um usuário que está no banco de dados.");
+			("Não é possivel obter as permissões de um usuário que não está no banco de dados.");
 		}
 		
 		Usuario usuario = usuarioEncontrado.get();

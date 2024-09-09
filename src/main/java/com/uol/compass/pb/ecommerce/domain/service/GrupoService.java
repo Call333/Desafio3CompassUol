@@ -6,14 +6,18 @@ import org.springframework.stereotype.Service;
 
 import com.uol.compass.pb.ecommerce.domain.entities.Grupo;
 import com.uol.compass.pb.ecommerce.domain.repository.GrupoRepository;
+import com.uol.compass.pb.ecommerce.domain.repository.UsuarioGrupoRepository;
 
 @Service
 public class GrupoService {
 	
 	public final GrupoRepository grupoRepository;
+	private final UsuarioGrupoRepository usuarioGrupoRepository;
 	
-	public GrupoService(GrupoRepository grupoRepository) {
+	public GrupoService(GrupoRepository grupoRepository,
+			UsuarioGrupoRepository usuarioGrupoRepository) {
 		this.grupoRepository = grupoRepository;
+		this.usuarioGrupoRepository = usuarioGrupoRepository;
 	}
 	
 	public Grupo saveGrupo(Grupo grupo) {
@@ -29,6 +33,7 @@ public class GrupoService {
 	}
 	
 	public void deleteGrupo(Long id) {
+		usuarioGrupoRepository.deletePermissoesById(id);
 		grupoRepository.deleteById(id);
 	}
 	
